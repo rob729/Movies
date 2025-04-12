@@ -1,5 +1,6 @@
 package com.rob729.movies.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -15,32 +16,28 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.rob729.movies.Utils
+import com.rob729.movies.utils.Utils
 import com.rob729.movies.models.ui.MovieUiModel
 
 @Composable
-fun MovieItem(movieUiModel: MovieUiModel) {
+fun MovieItem(movieUiModel: MovieUiModel, onClick: () -> Unit) {
 
-    Column {
-        movieUiModel.posterUrl?.takeIf { it.isNotBlank() }?.let {
-            AsyncImage(
-                model = Utils.getImageRequestModel(
-                    LocalContext.current,
-                    it
-                ),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(8.dp)),
-            )
-        }
+    Column(modifier = Modifier.clickable(onClick = onClick)) {
+        AsyncImage(
+            model = Utils.getImageRequestModel(
+                LocalContext.current,
+                movieUiModel.posterUrl
+            ),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(8.dp)),
+        )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        movieUiModel.title?.let {
-            Text(text = it, lineHeight = 18.sp)
-        }
+        Text(text = movieUiModel.title, fontSize = 16.sp)
     }
 }

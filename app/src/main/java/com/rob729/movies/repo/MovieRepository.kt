@@ -1,8 +1,8 @@
 package com.rob729.movies.repo
 
 import com.rob729.movies.BuildConfig
-import com.rob729.movies.Constants
-import com.rob729.movies.NetworkHelper
+import com.rob729.movies.utils.Constants
+import com.rob729.movies.utils.NetworkHelper
 import com.rob729.movies.database.MovieDao
 import com.rob729.movies.models.database.MovieData
 import com.rob729.movies.models.network.MovieListResponse
@@ -37,4 +37,6 @@ class MovieRepository(
             }
         }
     }
+
+    suspend fun getMovieDataById(movieId: Long) = movieDao.getMovieById(movieId)
 }

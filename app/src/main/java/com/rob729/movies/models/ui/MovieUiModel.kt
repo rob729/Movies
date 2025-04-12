@@ -3,7 +3,8 @@ package com.rob729.movies.models.ui
 import java.io.Serializable
 
 data class MovieUiModel(
-    val title: String? = null,
-    val posterUrl: String? = null,
-    val description: String? = null
+    val id: Long,
+    val title: String,
+    val posterUrl: String,
+    val description: String,
 ): Serializable

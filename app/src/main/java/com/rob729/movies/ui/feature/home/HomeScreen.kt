@@ -18,7 +18,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.rob729.movies.Constants
+import androidx.navigation.NavController
+import com.rob729.movies.utils.Constants
+import com.rob729.movies.NavigationScreens
 import com.rob729.movies.ui.UiState
 import com.rob729.movies.ui.components.MovieItem
 import com.rob729.movies.ui.components.SearchBar
@@ -26,6 +28,7 @@ import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
 
@@ -35,7 +38,6 @@ fun HomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding()
     ) {
 
         SearchBar(Constants.SEARCH_PLACEHOLDER_TEXT)
@@ -59,7 +61,10 @@ fun HomeScreen(
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
                     items(data.data.movies.size) { index ->
-                        MovieItem(data.data.movies[index])
+                        val movieData = data.data.movies[index]
+                        MovieItem(movieData) {
+                            navController.navigate("${NavigationScreens.DETAILS.name}/${movieData.id}")
+                        }
                     }
                 }
             }

@@ -8,11 +8,11 @@ import java.io.Serializable
 
 @Entity(tableName = "movies_table")
 data class MovieData(
-    @PrimaryKey @ColumnInfo(name = "id") val id: Int,
+    @PrimaryKey @ColumnInfo(name = "id") val id: Long,
     @ColumnInfo(name = "title") val title: String,
     @ColumnInfo(name = "poster_url") val posterUrl: String,
     @ColumnInfo(name = "description") val description: String
 ) : Serializable {
 
-    fun toMovieUiModel() = MovieUiModel(title, posterUrl, description)
+    fun toMovieUiModel() = MovieUiModel(id, title, posterUrl, description)
 }

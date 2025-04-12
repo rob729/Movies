@@ -1,4 +1,4 @@
-package com.rob729.movies
+package com.rob729.movies.utils
 
 import android.content.Context
 import coil.request.CachePolicy
