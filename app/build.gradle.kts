@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,8 +22,12 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "IMDB_KEY", gradleLocalProperties(rootDir, providers).getProperty("tmdb_api_key").toString())
+        }
         release {
             isMinifyEnabled = false
+            buildConfigField("String", "IMDB_KEY", gradleLocalProperties(rootDir, providers).getProperty("tmdb_api_key").toString())
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -37,6 +43,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
