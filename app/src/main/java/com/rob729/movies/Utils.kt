@@ -13,6 +13,6 @@ object Utils {
             .crossfade(crossFadeDuration)
             .networkCachePolicy(CachePolicy.ENABLED)
             .memoryCachePolicy(CachePolicy.ENABLED)
-            .diskCachePolicy(CachePolicy.DISABLED)
+            .diskCachePolicy(CachePolicy.ENABLED)
             .build()
 }

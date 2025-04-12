@@ -2,7 +2,7 @@ package com.rob729.movies.ui.feature.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.rob729.movies.models.network.MovieListResponse
+import com.rob729.movies.models.database.MovieData
 import com.rob729.movies.repo.BaseRepository
 import com.rob729.movies.repo.MovieRepository
 import com.rob729.movies.ui.UiState
@@ -21,9 +21,8 @@ class HomeViewModel(private val movieRepository: MovieRepository) : ViewModel() 
             _state.emit(
                 when (val movies = movieRepository.getMovies()) {
                     is BaseRepository.ApiResult.Error -> UiState.Error
-                    is BaseRepository.ApiResult.Success<MovieListResponse> -> UiState.Success<HomeState>(
-                        data = HomeState(movies = movies.data.results?.map { it.transformToCuratedData() }
-                            .orEmpty())
+                    is BaseRepository.ApiResult.Success<List<MovieData>> -> UiState.Success<HomeState>(
+                        data = HomeState(movies = movies.data.map { it.toMovieUiModel() })
                     )
                 }
             )
