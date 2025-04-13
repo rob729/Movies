@@ -13,11 +13,13 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.rob729.movies.utils.Constants
 import com.rob729.movies.NavigationScreens
@@ -44,8 +46,12 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        when (val data = homeState.value) {
-            UiState.Error -> TODO()
+        when (val state = homeState.value) {
+            is UiState.Error -> {
+                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Text(text = state.message, fontSize = 16.sp)
+                }
+            }
             UiState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -60,8 +66,8 @@ fun HomeScreen(
                     contentPadding = PaddingValues(top = 14.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)) {
-                    items(data.data.movies.size) { index ->
-                        val movieData = data.data.movies[index]
+                    items(state.data.movies.size) { index ->
+                        val movieData = state.data.movies[index]
                         MovieItem(movieData) {
                             navController.navigate("${NavigationScreens.DETAILS.name}/${movieData.id}")
                         }

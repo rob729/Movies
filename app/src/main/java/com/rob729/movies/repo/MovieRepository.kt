@@ -15,25 +15,32 @@ class MovieRepository(
 ) : BaseRepository() {
 
     suspend fun getMovies(): ApiResult<List<MovieData>> {
-        return if (networkHelper.isConnectedToInternet()) {
-            when (val response =
-                handleResponse(movieService.getMovies(Constants.LANGUAGE, BuildConfig.IMDB_KEY))) {
-                is ApiResult.Error -> ApiResult.Error(response.throwable)
-                is ApiResult.Success<MovieListResponse> -> {
-                    val movies = response.data.results?.mapNotNull { it.toMovieData() }
-                    if (movies.isNullOrEmpty()) {
-                        ApiResult.Error(Throwable("No movies found"))
-                    } else {
-                        ApiResult.Success(data = movies).also {
-                            movieDao.insertMovies(movies)
-                        }
-                    }
-                }
+        if (!networkHelper.isConnectedToInternet()) {
+            val cachedMovies = movieDao.getAllMovies()
+            return if (cachedMovies.isNotEmpty()) {
+                ApiResult.Success(cachedMovies)
+            } else {
+                ApiResult.Error(Constants.NO_DATA_ERROR_MESSAGE)
             }
+        }
+
+        return when (val response = handleResponse {
+            movieService.getMovies(Constants.LANGUAGE, BuildConfig.IMDB_KEY)
+        }) {
+            is ApiResult.Error -> {
+                ApiResult.Error(response.message)
+            }
+            is ApiResult.Success<MovieListResponse> -> processMoviesResponse(response.data)
+        }
+    }
+
+    private suspend fun processMoviesResponse(response: MovieListResponse): ApiResult<List<MovieData>> {
+        val movies = response.results?.mapNotNull { it.toMovieData() }.orEmpty()
+        return if (movies.isEmpty()) {
+            ApiResult.Error(Constants.NO_MOVIES_FOUND_MESSAGE)
         } else {
-            val movies = movieDao.getAllMovies()
-            ApiResult.Success(movies).takeIf { movies.isNotEmpty() } ?: run {
-                ApiResult.Error(Throwable("No internet connection and no cached data available."))
+            ApiResult.Success(movies).also {
+                movieDao.insertMovies(movies)
             }
         }
     }

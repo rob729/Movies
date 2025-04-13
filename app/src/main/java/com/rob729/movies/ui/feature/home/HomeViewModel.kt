@@ -19,10 +19,10 @@ class HomeViewModel(private val movieRepository: MovieRepository) : ViewModel() 
     init {
         viewModelScope.launch {
             _state.emit(
-                when (val movies = movieRepository.getMovies()) {
-                    is BaseRepository.ApiResult.Error -> UiState.Error
+                when (val result = movieRepository.getMovies()) {
+                    is BaseRepository.ApiResult.Error -> UiState.Error(result.message)
                     is BaseRepository.ApiResult.Success<List<MovieData>> -> UiState.Success<HomeState>(
-                        data = HomeState(movies = movies.data.map { it.toMovieUiModel() })
+                        data = HomeState(movies = result.data.map { it.toMovieUiModel() })
                     )
                 }
             )
