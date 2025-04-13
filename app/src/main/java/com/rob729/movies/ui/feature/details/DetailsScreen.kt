@@ -78,11 +78,19 @@ fun DetailsScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(text = movie.title, fontSize = 24.sp, modifier = Modifier.padding(horizontal = 16.dp))
+            Text(
+                text = movie.title,
+                fontSize = 24.sp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Text(text = movie.description, fontSize = 16.sp, modifier = Modifier.padding(horizontal = 16.dp))
+            Text(
+                text = movie.description,
+                fontSize = 16.sp,
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
         }
     }
 }

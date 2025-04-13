@@ -28,4 +28,15 @@ class HomeViewModel(private val movieRepository: MovieRepository) : ViewModel() 
             )
         }
     }
+
+    fun getMoviesByTitle(title: String) {
+        viewModelScope.launch {
+            _state.emit(
+                UiState.Success(
+                    data = HomeState(
+                        movieRepository.getMoviesByTitle(title).map { it.toMovieUiModel() })
+                )
+            )
+        }
+    }
 }

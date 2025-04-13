@@ -21,11 +21,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.rob729.movies.utils.Constants
 import com.rob729.movies.NavigationScreens
 import com.rob729.movies.ui.UiState
 import com.rob729.movies.ui.components.MovieItem
 import com.rob729.movies.ui.components.SearchBar
+import com.rob729.movies.utils.Constants
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -42,16 +42,13 @@ fun HomeScreen(
             .fillMaxSize()
     ) {
 
-        SearchBar(Constants.SEARCH_PLACEHOLDER_TEXT)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         when (val state = homeState.value) {
             is UiState.Error -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(text = state.message, fontSize = 16.sp)
                 }
             }
+
             UiState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     CircularProgressIndicator()
@@ -59,13 +56,22 @@ fun HomeScreen(
             }
 
             is UiState.Success<HomeState> -> {
+                SearchBar(Constants.SEARCH_PLACEHOLDER_TEXT) { query ->
+                    viewModel.getMoviesByTitle(query)
+                }
+
+                Spacer(modifier = Modifier.height(16.dp))
+
                 LazyVerticalGrid(
                     columns = GridCells.Fixed(2),
-                    modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp),
                     state = listState,
                     contentPadding = PaddingValues(top = 14.dp),
                     horizontalArrangement = Arrangement.spacedBy(16.dp),
-                    verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
                     items(state.data.movies.size) { index ->
                         val movieData = state.data.movies[index]
                         MovieItem(movieData) {

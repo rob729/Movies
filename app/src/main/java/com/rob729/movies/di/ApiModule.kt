@@ -1,8 +1,8 @@
 package com.rob729.movies.di
 
-import com.rob729.movies.utils.Constants
-import com.rob729.movies.repo.MovieRepository
 import com.rob729.movies.network.MovieService
+import com.rob729.movies.repo.MovieRepository
+import com.rob729.movies.utils.Constants
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.module.dsl.factoryOf

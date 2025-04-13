@@ -14,7 +14,7 @@ class DetailsViewModel(private val movieRepository: MovieRepository) : ViewModel
         get() = _movieDetailsFlow
     private val _movieDetailsFlow = MutableStateFlow<MovieUiModel?>(null)
 
-     fun fetchMovieData(movieId: Long) {
+    fun fetchMovieData(movieId: Long) {
         viewModelScope.launch {
             _movieDetailsFlow.emit(movieRepository.getMovieDataById(movieId)?.toMovieUiModel())
         }

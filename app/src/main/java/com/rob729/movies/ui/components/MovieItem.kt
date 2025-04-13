@@ -16,8 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.rob729.movies.utils.Utils
 import com.rob729.movies.models.ui.MovieUiModel
+import com.rob729.movies.utils.Utils
 
 @Composable
 fun MovieItem(movieUiModel: MovieUiModel, onClick: () -> Unit) {

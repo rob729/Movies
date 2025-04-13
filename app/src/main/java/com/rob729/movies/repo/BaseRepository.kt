@@ -12,7 +12,7 @@ abstract class BaseRepository {
 
     suspend fun <T> handleResponse(apiCall: suspend () -> Response<T>): ApiResult<T> {
         return runCatching {
-            val response  = apiCall.invoke()
+            val response = apiCall.invoke()
             response.body().takeIf { response.isSuccessful }?.let {
                 ApiResult.Success<T>(it)
             } ?: ApiResult.Error(response.message())

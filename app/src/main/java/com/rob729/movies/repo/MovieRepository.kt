@@ -46,4 +46,6 @@ class MovieRepository(
     }
 
     suspend fun getMovieDataById(movieId: Long) = movieDao.getMovieById(movieId)
+
+    suspend fun getMoviesByTitle(title: String) =  movieDao.getMoviesByTitle(title)
 }

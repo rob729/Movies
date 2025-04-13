@@ -14,14 +14,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SearchBar(placeholderText: String) {
+fun SearchBar(placeholderText: String, onValueChange: (String) -> Unit) {
     var text = remember { mutableStateOf("") }
 
     OutlinedTextField(
         value = text.value,
-        onValueChange = { text.value = it },
+        onValueChange = {
+            text.value = it
+            onValueChange(it)
+        },
         placeholder = { Text(text = placeholderText) },
         leadingIcon = { Icon(imageVector = Icons.Default.Search, contentDescription = "search") },
-        modifier = Modifier.fillMaxWidth().padding(start = 16.dp, end = 16.dp, top = 24.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 24.dp)
     )
 }
