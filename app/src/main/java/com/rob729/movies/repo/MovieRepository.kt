@@ -28,7 +28,12 @@ class MovieRepository(
             movieService.getMovies(Constants.LANGUAGE, BuildConfig.IMDB_KEY)
         }) {
             is ApiResult.Error -> {
-                ApiResult.Error(response.message)
+                val cachedMovies = movieDao.getAllMovies()
+                if (cachedMovies.isNotEmpty()) {
+                    return ApiResult.Success(cachedMovies)
+                } else {
+                    ApiResult.Error(response.message)
+                }
             }
             is ApiResult.Success<MovieListResponse> -> processMoviesResponse(response.data)
         }
